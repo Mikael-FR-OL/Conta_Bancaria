@@ -1,4 +1,3 @@
-from Base import *
 class Conta:
 
     def __init__(self, numero, titular, saldo, limite):
@@ -16,13 +15,14 @@ class Conta:
 
     def __pode_sacar(self, valor_a_sacar):
         valor_disponivel_a_sacar = self.__saldo + self.__limite
-        return valor_a_sacar <= valor_disponivel_a_sacar
+        if valor_a_sacar > valor_disponivel_a_sacar:
+            raise ValueError(f"Saldo insuficiente. Você tem {valor_disponivel_a_sacar} disponíveis.")
+        return True
 
     def saca(self, valor):
-        if(self.__pode_sacar(valor)):
-            self.__saldo -= valor
-        else:
-            print("O valor {} passou o limite".format(valor))
+        if not self.__pode_sacar(valor):
+            raise ValueError(f"O valor {valor} excede o saldo e limite.")
+        self.__saldo -= valor
 
     def transfere(self, valor, destino):
         self.saca(valor)
@@ -33,7 +33,7 @@ class Conta:
         return self.__saldo
 
     @property
-    def get_titular(self):
+    def titular(self):
         return self.__titular
 
     @property
@@ -50,4 +50,4 @@ class Conta:
 
     @staticmethod
     def codigos_bancos():
-        return {'BB':'001', 'Caixa':'104', 'Bradesco':'237'}
+        return {'BB': '001', 'Caixa': '104', 'Bradesco': '237'}
